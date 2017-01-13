@@ -1,0 +1,19 @@
+{
+	"style": {
+		"background-color": "#fffaf0",
+		"margin": "10px 10px 10px 10px",
+		"font": "Times New Roman"
+	},
+	"pages": [
+		{
+			"style" : {
+				"background-color: #000000"
+			},
+			"content" : "this page 1"
+		},
+		{
+			"style" : {},
+			"content" : "page 2"
+		}
+	]
+}
