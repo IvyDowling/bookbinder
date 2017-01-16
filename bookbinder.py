@@ -12,11 +12,11 @@ def reader(title):
     #document has style obj and pages array
     style = data["style"]
     pages = data["pages"]
+    page_style = [style if p is {} else inheritGlobalStyle(style,p)]
+    print(page_style)
     book = []
     for p in pages:
-        page_style = [style if p is {} else ]
         book.append(Page(p["content"], page_style))
-        print(p["content"])
 
 
 def writer(title, book):
@@ -29,10 +29,25 @@ def writer(title, book):
     c.save()
 
 
+def inheritGlobalStyle(glob, loc):
+    for key in vars(newStyle).keys():
+        glob[key] = newStyle[key]
+
+
 class Page:
     def __init__(self, content, style):
         self.content = content
         self.style = style
+
+    def __eq__(self, other):
+        if self.content == other.content:
+            if self.style == other.style:
+                return True
+
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 if __name__ == "__main__":
     if len(sys.argv) is 2:
