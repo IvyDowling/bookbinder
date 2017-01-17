@@ -6,14 +6,17 @@
 	},
 	"pages": [
 		{
-			"style" : {"background-color: #000000"},
+			"style" : {},
 			"content" : {
-				"text": "this page 1",
-				"text": "if you're an ass hole"
+				"text1": "this page 1",
+				"text2": "if you're an ass hole"
 			}
 		},
 		{
-			"style" : {},
+			"style" : {
+				"margin": ["0px", "0px", "0px", "0px"],
+				"background-color": "gray"
+			},
 			"content" : {"text": "not page 1"}
 		},
 		{
