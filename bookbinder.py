@@ -27,7 +27,7 @@ def reader(title):
     book = []
     for p in data["pages"]:
         book.append(Page(p["content"], page_style))
-
+    writer(title, book)
 
 def writer(title, book):
     filename = title + '.pdf'
