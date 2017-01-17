@@ -1,19 +1,24 @@
 {
 	"style": {
 		"background-color": "#fffaf0",
-		"margin": "10px 10px 10px 10px",
-		"font": "Times New Roman"
+		"margin": ["10px", "10px", "10px", "10px"],
+		"font": ["20px", "Times New Roman"]
 	},
 	"pages": [
 		{
-			"style" : {
-				"background-color: #000000"
-			},
-			"content" : "this page 1"
+			"style" : {"background-color: #000000"},
+			"content" : {
+				"text": "this page 1",
+				"text": "if you're an ass hole"
+			}
 		},
 		{
 			"style" : {},
-			"content" : "page 2"
+			"content" : {"text": "not page 1"}
+		},
+		{
+			"style" : {"background-color": "white"},
+			"content" : {"img": "book.png"}
 		}
 	]
 }
