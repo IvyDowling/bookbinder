@@ -1,8 +1,11 @@
 import json
 import sys
+import os
+from collections import OrderedDict
 from reportlab.pdfgen import canvas
+# from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
-
+from reportlab.lib.utils import ImageReader
 
 supportedStyles = [
     "font",
@@ -12,22 +15,22 @@ supportedStyles = [
 ]
 
 
-def reader(title):
-    with open(title) as data_file:
-        data = json.load(data_file)
-
+def reader(filename):
+    with open(filename) as data_file:
+        data = json.load(data_file, object_pairs_hook=OrderedDict)
     # document has style obj and pages obj
     global_style = data["style"]
     page_style = []
     for p in data["pages"]:
-        inhrt = global_style.copy()
+        inherit = global_style.copy()
         for key, value in p["style"].iteritems():
-            inhrt[key] = value
-        page_style.append(inhrt)
+            inherit[key] = value
+        page_style.append(inherit)
     book = []
     for p in data["pages"]:
-        book.append(Page(p["content"], page_style))
-    writer(title, book)
+        book.append(Page(OrderedDict(p["content"]), page_style))
+    writer(filename.rsplit(".", 1)[0], book)
+
 
 def writer(title, book):
     filename = title + '.pdf'
@@ -36,33 +39,32 @@ def writer(title, book):
     for pg in book:
         # setup style
         for style in pg.style:
-            print(style)
-            css_to_reportlab(c, style)
-
+            """
+            canvas.setFont(fontname, size)
+            canvas.getAvailableFonts()
+            canvas.setFillColor(red)
+            canvas.rotate(theta)
+            """
+            for cmd in style:
+                if cmd is supportedStyles[0]:  # font: (size px) (face)
+                    c.setFont(style[cmd][1], style[cmd][0])
+                if cmd is supportedStyles[1]:  # background-color: (rgb)
+                    c.setFillColor(style[cmd])
+                if cmd is supportedStyles[2]:  # rotate (degrees)
+                    c.rotate(style[cmd])
+                if cmd is supportedStyles[3]:  # margin (x) (y)
+                    c.translate(style[cmd][0], style[cmd][1])
         # content
-        for cont in pg.content:
-            print(cont)
-
+        for key in pg.content:
+            if key == "img":
+                content_img = ImageReader(pg.content["img"])
+                c.drawImage(content_img, 10, 10, mask="auto")
+            elif key == "text":
+                c.drawString(10, 10, pg.content["text"])
         # ends page
         c.showPage()
     print("writing to file: ", title, ".pdf")
     c.save()
-
-
-def css_to_reportlab(canvas, css):
-    # c.setFont(fontname, size)
-    # canvas.getAvailableFonts()
-    # c.drawString(x,y,text)
-    # c.setFillColor(red)
-    # canvas.rotate(theta)
-    if css is supportedStyles[0]: # font: (size px) (face)
-        print(css)
-    if css is supportedStyles[1]: # background-color: (rgb)
-        print(css)
-    if css is supportedStyles[2]: # rotate (degrees)
-        print(css)
-    if css is supportedStyles[3]: # margin (top) (right) (bottom) (left)
-        print(css)
 
 
 class Page:
@@ -79,6 +81,7 @@ class Page:
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:

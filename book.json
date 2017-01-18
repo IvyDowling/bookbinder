@@ -1,20 +1,19 @@
 {
 	"style": {
 		"background-color": "#fffaf0",
-		"margin": ["10px", "10px", "10px", "10px"],
+		"margin": ["10px", "10px"],
 		"font": ["20px", "Times New Roman"]
 	},
 	"pages": [
 		{
 			"style" : {},
 			"content" : {
-				"text1": "this page 1",
-				"text2": "if you're an ass hole"
+				"text": "this page 1"
 			}
 		},
 		{
 			"style" : {
-				"margin": ["0px", "0px", "0px", "0px"],
+				"margin": ["0px", "0px"],
 				"background-color": "gray"
 			},
 			"content" : {"text": "not page 1"}
