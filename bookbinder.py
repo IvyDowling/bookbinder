@@ -35,8 +35,12 @@ def reader(filename):
 
 def writer(title, book):
     filename = title + '.pdf'
-    c = canvas.Canvas(filename, pagesize=landscape(letter))
-    width, height = letter
+    c = canvas.Canvas(filename, pagesize=landscape(letter),
+        rightMargin=18, leftMargin=18, topMargin=18, bottomMargin=18)
+    width, height = landscape
+    # >>examples show appending Paragraphs to a list then using
+    # >>c.build(LIST) to compile it
+    # https://www.blog.pythonlibrary.org/2010/03/08/a-simple-step-by-step-reportlab-tutorial/
     for pg in book:
         # setup style
         for style in pg.style:
@@ -71,6 +75,7 @@ def writer(title, book):
     c.save()
 
 
+# see Paragraph from reportlab.platypus, i think that's what this is essentially
 class Page:
     def __init__(self, content, style):
         self.content = content
