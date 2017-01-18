@@ -35,7 +35,7 @@ def reader(filename):
 
 def writer(title, book):
     filename = title + '.pdf'
-    c = canvas.Canvas(filename, pagesize=letter)
+    c = canvas.Canvas(filename, pagesize=landscape(letter))
     width, height = letter
     for pg in book:
         # setup style
