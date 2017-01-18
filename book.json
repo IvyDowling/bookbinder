@@ -1,19 +1,19 @@
 {
 	"style": {
 		"background-color": "#fffaf0",
-		"margin": ["10px", "10px"],
-		"font": ["20px", "Times New Roman"]
+		"margin": ["10", "20"],
+		"font": ["20", "Times-Roman"]
 	},
 	"pages": [
 		{
-			"style" : {},
+			"style" : {"rotate" :  "90"},
 			"content" : {
 				"text": "this page 1"
 			}
 		},
 		{
 			"style" : {
-				"margin": ["0px", "0px"],
+				"margin": ["0", "0"],
 				"background-color": "gray"
 			},
 			"content" : {"text": "not page 1"}

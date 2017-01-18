@@ -6,6 +6,7 @@ from reportlab.pdfgen import canvas
 # from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.utils import ImageReader
+from reportlab.lib.units import inch, cm
 
 supportedStyles = [
     "font",
@@ -40,20 +41,23 @@ def writer(title, book):
         # setup style
         for style in pg.style:
             """
-            canvas.setFont(fontname, size)
             canvas.getAvailableFonts()
-            canvas.setFillColor(red)
-            canvas.rotate(theta)
             """
             for cmd in style:
-                if cmd is supportedStyles[0]:  # font: (size px) (face)
-                    c.setFont(style[cmd][1], style[cmd][0])
-                if cmd is supportedStyles[1]:  # background-color: (rgb)
+                if cmd == supportedStyles[0]:  # font: (size px) (face)
+                    print(style[cmd][1], int(style[cmd][0]))
+                    c.setFont(style[cmd][1], int(style[cmd][0]))
+                if cmd == supportedStyles[1]:  # background-color: (rgb)
+                    # must find out what this will take, rgb, plaintext, hex ...
+                    print(style[cmd])
                     c.setFillColor(style[cmd])
-                if cmd is supportedStyles[2]:  # rotate (degrees)
-                    c.rotate(style[cmd])
-                if cmd is supportedStyles[3]:  # margin (x) (y)
-                    c.translate(style[cmd][0], style[cmd][1])
+                if cmd == supportedStyles[2]:  # rotate (degrees)
+                    print(int(style[cmd]))
+                    c.rotate(int(style[cmd]))
+                if cmd == supportedStyles[3]:  # margin (x) (y)
+                    # want to support inch & cm here
+                    print(style[cmd][0], style[cmd][1])
+                    c.translate(int(style[cmd][0]) * inch, int(style[cmd][1]) * inch)
         # content
         for key in pg.content:
             if key == "img":
