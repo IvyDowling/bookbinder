@@ -3,8 +3,9 @@ import sys
 import os
 from collections import OrderedDict
 from reportlab.pdfgen import canvas
-# from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.units import inch, cm
 
@@ -12,7 +13,11 @@ supportedStyles = [
     "font",
     "background-color",
     "rotate",
-    "margin"
+    "margin",
+    "margin-top",
+    "margin-bottom",
+    "margin-right",
+    "margin-left"
 ]
 
 
@@ -30,23 +35,64 @@ def reader(filename):
     book = []
     for p in data["pages"]:
         book.append(Page(OrderedDict(p["content"]), page_style))
-    writer(filename.rsplit(".", 1)[0], book)
+    paragraphs = translate(book)
+    writer(filename.rsplit(".", 1)[0], paragraphs)
 
 
-def writer(title, book):
-    filename = title + '.pdf'
-    c = canvas.Canvas(filename, pagesize=landscape(letter),
-        rightMargin=18, leftMargin=18, topMargin=18, bottomMargin=18)
-    width, height = landscape
-    # >>examples show appending Paragraphs to a list then using
-    # >>c.build(LIST) to compile it
+def translate(book):
+    """
+    :param book: List of content and style tuples for each pages
+    :return: List of Paragraphs with styling and content setup for platypus
+
+    --here are all of the params of ParagraphStyle:
+    spaceBefore = 0, fontName = Helvetica, bulletFontName = Helvetica
+    borderRadius = None, firstLineIndent = 0, leftIndent = 0
+    underlineProportion = 0.0, rightIndent = 0, wordWrap = None
+    allowWidows = 1, backColor = None, justifyLastLine = 0
+    textTransform = None, justifyBreaks = 0
+    spaceShrinkage = 0.05, alignment = 0, borderColor = None,
+    splitLongWords = 1, leading = 12, bulletIndent = 0,
+    allowOrphans = 0, bulletFontSize = 10, fontSize = 10,
+    borderWidth = 0, bulletAnchor = start, borderPadding = 0,
+    endDots = None, textColor = Color(0,0,0,1), spaceAfter = 0
+    """
     # https://www.blog.pythonlibrary.org/2010/03/08/a-simple-step-by-step-reportlab-tutorial/
+    # this is the book now.
+    story = []
+    page_number = 0
     for pg in book:
+        page_number += 1
+        # setup style
+        page_style = ParagraphStyle("page" + str(page_number))
+        for style in pg.style:
+            for cmd in style:
+                if cmd == supportedStyles[0]:  # font: (size px) (face)
+                if cmd == supportedStyles[1]:  # background-color: (rgb)
+                if cmd == supportedStyles[2]:  # rotate (degrees)
+                if cmd == supportedStyles[3]:  # margin (top) (right) (bottom) (left)
+        # content
+        for key in pg.content:
+            if key == "img":
+                # Image("lj8100.jpg", width=2*inch, height=2*inch)
+                story.append(Image(pg.content["img"]))
+            elif key == "text":
+                story.append(Paragraph(pg.content["text"], page_style))
+
+        story.append(PageBreak())
+
+    return book
+
+
+def writer(title, paragraphs):
+    filename = title + '.pdf'
+    margin = 18
+    doc = SimpleDocTemplate(filename, pagesize=landscape(letter),
+                            rightMargin=margin, leftMargin=margin,
+                            topMargin=margin, bottomMargin=margin)
+    """
+    for pg in paragraphs:
         # setup style
         for style in pg.style:
-            """
-            canvas.getAvailableFonts()
-            """
             for cmd in style:
                 if cmd == supportedStyles[0]:  # font: (size px) (face)
                     print(style[cmd][1], int(style[cmd][0]))
@@ -73,9 +119,9 @@ def writer(title, book):
         c.showPage()
     print("writing to file: ", title, ".pdf")
     c.save()
+    """
 
 
-# see Paragraph from reportlab.platypus, i think that's what this is essentially
 class Page:
     def __init__(self, content, style):
         self.content = content
