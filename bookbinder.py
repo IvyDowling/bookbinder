@@ -20,6 +20,14 @@ supportedStyles = [
     "margin-left"
 ]
 
+marginCommands = [
+    "margin",
+    "margin-top",
+    "margin-right",
+    "margin-bottom",
+    "margin-left"
+]
+
 
 def reader(filename):
     with open(filename) as data_file:
@@ -64,10 +72,30 @@ def translate(doc, book):
     """
     # this is the book
     story = []
+    templates = []
     page_number = 0
     for pg in book:
         page_number += 1
-        # setup style
+        # find margins first
+        # pre-build frame bc we need one either way
+        # frame takes height & width, not top and right
+        f = Frame(doc.leftMargin, doc.bottomMargin,
+                  doc.width/2, doc.height, id='p' + str(page_number))
+        for mrgn in pg.style:
+            if cmd == supportedStyles[2]:  # margin (top) (right) (bottom) (left)
+                f = Frame(int(style[cmd][3]), int(style[cmd][2]),
+                          (doc.width/2) - int(style[cmd][1]),
+                          doc.height - int(style[cmd][0]),
+                          id='p' + str(page_number))
+            elif cmd == supportedStyles[3]:  # margin-top
+                f.height = doc.height - int(style[cmd][0])
+            elif cmd == supportedStyles[4]:  # margin-right
+                f.width = (doc.width/2) - int(style[cmd][1])
+            elif cmd == supportedStyles[5]:  # margin-bottom
+                f.y1 = int(style[cmd][2])
+            elif cmd == supportedStyles[6]:  # margin-left
+                f.x1 = int(style[cmd][3])
+        # setup generic style
         page_style = ParagraphStyle("page" + str(page_number))
         for style in pg.style:
             for cmd in style:
@@ -87,16 +115,7 @@ def translate(doc, book):
                 # http://code.activestate.com/recipes/123612-basedoctemplate-with-2-pagetemplate/
                 # This shows PageTemplate and a function to use canvas
                 # functions to alter a page
-                elif cmd == supportedStyles[2]: # margin (top) (right) (bottom) (left)
-                    PageTemplate()
-                elif cmd == supportedStyles[3]: # margin-top
-                    PageTemplate()
-                elif cmd == supportedStyles[4]: # margin-right
-                    PageTemplate()
-                elif cmd == supportedStyles[5]: # margin-bottom
-                    PageTemplate()
-                elif cmd == supportedStyles[6]: # margin-left
-                    PageTemplate()
+
         # content
         for key in pg.content:
             if key == "img":
