@@ -36,9 +36,10 @@ def reader(filename):
     for p in data["pages"]:
         book.append(Page(OrderedDict(p["content"]), page_style))
 
-
     filename = filename.rsplit(".", 1)[0] + '.pdf'
-    doc = BaseDocTemplate(filename, pagesize=landscape(letter))
+    doc = BaseDocTemplate(filename, pagesize=landscape(letter),
+                          rightMargin=0, leftMargin=0,
+                          topMargin=0, bottomMargin=0)
     paragraphs = translate(doc, book)
     writer(doc, paragraphs)
 
@@ -61,8 +62,7 @@ def translate(doc, book):
     borderWidth = 0, bulletAnchor = start, borderPadding = 0,
     endDots = None, textColor = Color(0,0,0,1), spaceAfter = 0
     """
-    # https://www.blog.pythonlibrary.org/2010/03/08/a-simple-step-by-step-reportlab-tutorial/
-    # this is the book now.
+    # this is the book
     story = []
     page_number = 0
     for pg in book:
@@ -71,10 +71,10 @@ def translate(doc, book):
         page_style = ParagraphStyle("page" + str(page_number))
         for style in pg.style:
             for cmd in style:
-                if cmd == supportedStyles[0]: # font: (size) (face)
+                if cmd == supportedStyles[0]:  # font: (size) (face)
                     page_style.fontName = int(style[cmd][1])
                     page_style.fontSize = int(style[cmd][0])
-                elif cmd == supportedStyles[1]: # background-color: (rgb)
+                elif cmd == supportedStyles[1]:  # background-color: (rgb)
                     # This is actually broken and dumb
                     # you just make a huge rectangle behind everything else here.
                     print("GET LANDSCAPE PAGE VALUES")
@@ -97,7 +97,6 @@ def translate(doc, book):
                     PageTemplate()
                 elif cmd == supportedStyles[6]: # margin-left
                     PageTemplate()
-
         # content
         for key in pg.content:
             if key == "img":
