@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29320d8f-1c2a-41cd-92c8-e70cfc8d5a16" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/book.pdf" afterPath="$PROJECT_DIR$/book.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/book.json" afterPath="$PROJECT_DIR$/book.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bookbinder.py" afterPath="$PROJECT_DIR$/bookbinder.py" />
     </list>
     <ignored path="bookbinder.iws" />
@@ -26,22 +28,10 @@
       <file leaf-file-name="bookbinder.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bookbinder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="82" column="18" selection-start-line="82" selection-start-column="18" selection-end-line="82" selection-end-column="18" />
+            <state relative-caret-position="-198">
+              <caret line="109" column="43" selection-start-line="109" selection-start-column="43" selection-end-line="109" selection-end-column="43" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="2colexample.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/2colexample.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="33" column="49" selection-start-line="32" selection-start-column="15" selection-end-line="33" selection-end-column="49" />
-              <folding>
-                <element signature="e#104#113#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -50,8 +40,8 @@
       <file leaf-file-name="book.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/book.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
+            <state relative-caret-position="414">
+              <caret line="23" column="44" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -72,8 +62,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/book.json" />
         <option value="$PROJECT_DIR$/2colexample.py" />
+        <option value="$PROJECT_DIR$/book.json" />
         <option value="$PROJECT_DIR$/bookbinder.py" />
       </list>
     </option>
@@ -374,9 +364,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="960" y="21" width="960" height="1059" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23117155" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23117155" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -517,28 +507,28 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/book.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/2colexample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="33" column="49" selection-start-line="32" selection-start-column="15" selection-end-line="33" selection-end-column="49" />
+        <state relative-caret-position="470">
+          <caret line="32" column="48" selection-start-line="32" selection-start-column="48" selection-end-line="32" selection-end-column="48" />
           <folding>
             <element signature="e#104#113#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/book.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="44" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bookbinder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="82" column="18" selection-start-line="82" selection-start-column="18" selection-end-line="82" selection-end-column="18" />
+        <state relative-caret-position="-198">
+          <caret line="109" column="43" selection-start-line="109" selection-start-column="43" selection-end-line="109" selection-end-column="43" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>

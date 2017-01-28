@@ -1,26 +1,28 @@
 {
 	"style": {
-		"background-color": "#fffaf0",
+		"background-color": ["255","255","255"],
 		"margin": ["10", "20"],
 		"font": ["20", "Times-Roman"]
 	},
 	"pages": [
 		{
-			"style" : {"rotate" :  "90"},
-			"content" : {
+			"style": {
+				"rotate": "90"
+			},
+			"content": {
 				"text": "this page 1"
 			}
 		},
 		{
 			"style" : {
 				"margin": ["0", "0"],
-				"background-color": "gray"
+				"background-color": ["255","0","100"]
 			},
 			"content" : {"text": "not page 1"}
 		},
 		{
-			"style" : {"background-color": "white"},
-			"content" : {"img": "book.png"}
+			"style" : {"background-color": "fff000"},
+			"content" : {"img": ["book.png", "4", "4"]}
 		}
 	]
 }

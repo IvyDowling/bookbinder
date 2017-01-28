@@ -3,11 +3,12 @@ import sys
 import os
 from collections import OrderedDict
 from reportlab.pdfgen import canvas
-from reportlab.platypus import BaseDocTemplate, Frame, Paragraph, Spacer, Image, PageBreak
+from reportlab.platypus import BaseDocTemplate, PageTemplate, \
+    Frame, Paragraph, Spacer, Image, PageBreak, NextPageTemplate
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.pagesizes import letter, landscape
+from reportlab.lib.colors import Color, HexColor
 from reportlab.graphics.shapes import Rect, Drawing
-from reportlab.lib.utils import ImageReader
 from reportlab.lib.units import inch, cm
 
 supportedStyles = [
@@ -76,63 +77,72 @@ def translate(doc, book):
     page_number = 0
     for pg in book:
         page_number += 1
-        # find margins first
+        # MARGINS
         # pre-build frame bc we need one either way
         # frame takes height & width, not top and right
-        f = Frame(doc.leftMargin, doc.bottomMargin,
-                  doc.width/2, doc.height, id='p' + str(page_number))
+        frame = Frame(doc.leftMargin* cm, doc.bottomMargin* cm,
+                      (doc.width/2) * cm, (doc.height) * cm, id='p' + str(page_number))
         for mrgn in pg.style:
-            if cmd == supportedStyles[2]:  # margin (top) (right) (bottom) (left)
-                f = Frame(int(style[cmd][3]), int(style[cmd][2]),
-                          (doc.width/2) - int(style[cmd][1]),
-                          doc.height - int(style[cmd][0]),
+            if mrgn == supportedStyles[2]:  # margin (top) (right) (bottom) (left)
+                frame = Frame(int(style[cmd][3])* cm, int(style[cmd][2])* cm,
+                          (doc.width/2) - int(style[cmd][1])* cm,
+                          doc.height - int(style[cmd][0])* cm,
                           id='p' + str(page_number))
-            elif cmd == supportedStyles[3]:  # margin-top
-                f.height = doc.height - int(style[cmd][0])
-            elif cmd == supportedStyles[4]:  # margin-right
-                f.width = (doc.width/2) - int(style[cmd][1])
-            elif cmd == supportedStyles[5]:  # margin-bottom
-                f.y1 = int(style[cmd][2])
-            elif cmd == supportedStyles[6]:  # margin-left
-                f.x1 = int(style[cmd][3])
-        # setup generic style
+            elif mrgn == supportedStyles[3]:  # margin-top
+                frame.height = doc.height - int(style[cmd][0]) * cm
+            elif mrgn == supportedStyles[4]:  # margin-right
+                frame.width = (doc.width/2) - int(style[cmd][1]) * cm
+            elif mrgn == supportedStyles[5]:  # margin-bottom
+                frame.y1 = int(style[cmd][2]) * cm
+            elif mrgn == supportedStyles[6]:  # margin-left
+                frame.x1 = int(style[cmd][3]) * cm
+        # STYLE
         page_style = ParagraphStyle("page" + str(page_number))
         for style in pg.style:
             for cmd in style:
                 if cmd == supportedStyles[0]:  # font: (size) (face)
-                    page_style.fontName = int(style[cmd][1])
+                    page_style.fontName = style[cmd][1]
                     page_style.fontSize = int(style[cmd][0])
-                elif cmd == supportedStyles[1]:  # background-color: (rgb)
+                elif cmd == supportedStyles[1]:  # background-color: [r, g, b] or hex
                     # This is actually broken and dumb
-                    # you just make a huge rectangle behind everything else here.
-                    print("GET LANDSCAPE PAGE VALUES")
-                    draw = Drawing(200, 200)
-                    draw.add(Rect(0, 0, 200, 200,
-                                  fillColor=style[cmd][0],
-                                  strokeColor=style[cmd][0],
+                    # you just make a huge rectangle
+                    draw = Drawing(doc.width/2, doc.height)
+                    if len(style[cmd]) == 6:
+                        # hex
+                        color = HexColor('0x' + style[cmd][0])
+                    else:
+                        # rgb values in report lab take 0-1, import 0-255
+                        r = float(style[cmd][0])/255
+                        g = float(style[cmd][1])/255
+                        b = float(style[cmd][2])/255
+                        color = Color(r, g, b)
+
+                    draw.add(Rect(0 * cm, 0 * cm, (doc.width/2) * cm, doc.height * cm,
+                                  fillColor=color,
+                                  strokeColor=color,
                                   strokeWidth=0))
                     story.append(draw)
-                # http://code.activestate.com/recipes/123612-basedoctemplate-with-2-pagetemplate/
-                # This shows PageTemplate and a function to use canvas
-                # functions to alter a page
-
-        # content
+        # CREATE PAGE TEMPLATE
+        templates.append(PageTemplate(
+            id='pt'+str(page_number),
+            frames=frame
+        ))
+        # CONTENT
         for key in pg.content:
             if key == "img":
-                # Image("lj8100.jpg", width=2*inch, height=2*inch)
-                story.append(Image(pg.content["img"]))
+                story.append(Image(pg.content["img"][0],
+                                   int(pg.content["img"][1]) * cm,
+                                   int(pg.content["img"][2]) * cm))
             elif key == "text":
                 story.append(Paragraph(pg.content["text"], page_style))
 
+        # story.append(NextPageTemplate('pt'+str(page_number+1)))
         story.append(PageBreak())
-
-    return book
+    doc.addPageTemplates(templates)
+    return story
 
 
 def writer(doc, paragraphs):
-    left = Frame(doc.leftMargin, doc.bottomMargin, doc.width / 2 - 6, doc.height, id='col1')
-    right = Frame(doc.leftMargin + doc.width / 2 + 6, doc.bottomMargin, doc.width / 2 - 6,
-                   doc.height, id='col2')
     """
     for pg in paragraphs:
         # setup style
