@@ -80,22 +80,23 @@ def translate(doc, book):
         # MARGINS
         # pre-build frame bc we need one either way
         # frame takes height & width, not top and right
-        frame = Frame(doc.leftMargin * cm, doc.bottomMargin * cm,
-                      12 * cm, 12 * cm, id='p' + str(page_number))
+        frame = Frame(0 * cm, 0 * cm,
+                      (doc.width / 2) * cm, doc.height * cm, id='p' + str(page_number))
         for margin in pg.style:
-            for mrgn in margin:
-                if mrgn == supportedStyles[2]:  # margin (top) (right) (bottom) (left)
-                    frame = Frame(int(margin[mrgn][3]) * cm, int(margin[mrgn][2]) * cm,
-                              ((doc.width/2) - int(margin[mrgn][1]) * cm), (doc.height - int(margin[mrgn][0]) * cm),
-                              id='p' + str(page_number))
-                elif mrgn == supportedStyles[3]:  # margin-top
-                    frame.height = doc.height - int(margin[mrgn][0]) * cm
-                elif mrgn == supportedStyles[4]:  # margin-right
-                    frame.width = (doc.width/2) - int(margin[mrgn][1]) * cm
-                elif mrgn == supportedStyles[5]:  # margin-bottom
-                    frame.y1 = int(margin[mrgn][2]) * cm
-                elif mrgn == supportedStyles[6]:  # margin-left
-                    frame.x1 = int(margin[mrgn][3]) * cm
+            for margin_command in margin:
+                if margin_command == supportedStyles[2]:  # margin (top) (right) (bottom) (left)
+                    frame = Frame(int(margin[margin_command][3]) * cm, int(margin[margin_command][2]) * cm,
+                                  ((doc.width / 2) - int(margin[margin_command][1]) * cm),
+                                  (doc.height - int(margin[margin_command][0]) * cm),
+                                  id='p' + str(page_number))
+                elif margin_command == supportedStyles[3]:  # margin-top
+                    frame.height = doc.height - int(margin[margin_command][0]) * cm
+                elif margin_command == supportedStyles[4]:  # margin-right
+                    frame.width = (doc.width / 2) - int(margin[margin_command][1]) * cm
+                elif margin_command == supportedStyles[5]:  # margin-bottom
+                    frame.y1 = int(margin[margin_command][2]) * cm
+                elif margin_command == supportedStyles[6]:  # margin-left
+                    frame.x1 = int(margin[margin_command][3]) * cm
 
         print "Frame on page " + str(page_number) + " defined by margin:"
         print "left: " + str(frame.x1) + " bottom: " + str(frame.y1) + \
@@ -111,15 +112,15 @@ def translate(doc, book):
                 elif cmd == supportedStyles[1]:  # background-color: [r, g, b] or hex
                     # This is actually broken and dumb
                     # you just make a huge rectangle
-                    draw = Drawing(doc.width/2, doc.height)
+                    draw = Drawing(doc.width / 2, doc.height)
                     if len(style[cmd]) == 6:
                         # hex
                         color = HexColor('0x' + style[cmd][0])
                     else:
                         # rgb values in report lab take 0-1, import 0-255
-                        r = float(style[cmd][0])/255
-                        g = float(style[cmd][1])/255
-                        b = float(style[cmd][2])/255
+                        r = float(style[cmd][0]) / 255
+                        g = float(style[cmd][1]) / 255
+                        b = float(style[cmd][2]) / 255
                         color = Color(r, g, b)
                     print "background color: " + str(color)
                     draw.add(Rect(frame.x1, frame.y1,
@@ -130,7 +131,7 @@ def translate(doc, book):
                     story.append(draw)
         # CREATE PAGE TEMPLATE
         templates.append(PageTemplate(
-            id='pt'+str(page_number),
+            id='pt' + str(page_number),
             frames=frame
         ))
         # CONTENT
@@ -144,9 +145,11 @@ def translate(doc, book):
                 print "text: " + str(pg.content["text"])
                 story.append(Paragraph(pg.content["text"], page_style))
 
-        # story.append(NextPageTemplate('pt'+str(page_number+1)))
+        story.append(NextPageTemplate('pt' + str(page_number + 1)))
         print ">>end page " + str(page_number)
         story.append(PageBreak())
+    story.pop()  # remove NextPageTemplate and Break
+    story.pop()
     doc.addPageTemplates(templates)
     return story
 
