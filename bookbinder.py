@@ -143,37 +143,6 @@ def translate(doc, book):
 
 
 def writer(doc, paragraphs):
-    """
-    for pg in paragraphs:
-        # setup style
-        for style in pg.style:
-            for cmd in style:
-                if cmd == supportedStyles[0]:  # font: (size px) (face)
-                    print(style[cmd][1], int(style[cmd][0]))
-                    c.setFont(style[cmd][1], int(style[cmd][0]))
-                if cmd == supportedStyles[1]:  # background-color: (rgb)
-                    # must find out what this will take, rgb, plaintext, hex ...
-                    print(style[cmd])
-                    c.setFillColor(style[cmd])
-                if cmd == supportedStyles[2]:  # rotate (degrees)
-                    print(int(style[cmd]))
-                    c.rotate(int(style[cmd]))
-                if cmd == supportedStyles[3]:  # margin (x) (y)
-                    # want to support inch & cm here
-                    print(style[cmd][0], style[cmd][1])
-                    c.translate(int(style[cmd][0]) * inch, int(style[cmd][1]) * inch)
-        # content
-        for key in pg.content:
-            if key == "img":
-                content_img = ImageReader(pg.content["img"])
-                c.drawImage(content_img, 10, 10, mask="auto")
-            elif key == "text":
-                c.drawString(10, 10, pg.content["text"])
-        # ends page
-        c.showPage()
-    print("writing to file: ", title, ".pdf")
-    c.save()
-    """
     doc.build(paragraphs)
 
 
@@ -181,16 +150,6 @@ class Page:
     def __init__(self, content, style):
         self.content = content
         self.style = style
-
-    def __eq__(self, other):
-        if self.content == other.content:
-            if self.style == other.style:
-                return True
-
-        return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
 
 if __name__ == "__main__":
